@@ -1,7 +1,12 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <v-container grid-list-{xs through xl} :fluid="true">
+      <v-layout row wrap>
+        <v-flex xs12 sm12 md12 class="cyan lighten-4">
+            <v-icon :size="'300px'">mic</v-icon>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 
