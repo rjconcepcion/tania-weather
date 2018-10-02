@@ -13,8 +13,28 @@
 <script>
 import Artyom from "artyom.js"
 const artyom = new Artyom();
+const speakNow = (msg)  => {
+      artyom.say(msg, {
+        onStart: () => {
+          console.log("The text is being readed");
+        },
+        onEnd: () => {
+          console.log("Finished!");
+        }
+      });
+    }
 export default {
   name: 'App',
+  data: () => ({
+    allCommands: [
+      {
+        indexes:["hello","good morning","hey"], // These spoken words will trigger the execution of the command
+        action:() => { // Action to be executed when a index match with spoken word
+          speakNow('Hello, im Tanya your virtual weather channel in Bulacan.');
+        }
+      }
+    ]
+  }),
   methods: {
     initialize() {
       artyom.initialize({
@@ -27,19 +47,13 @@ export default {
         console.log("Ready to speak!");
       });
     },
-    speakNow(msg) {
-      artyom.say(msg, {
-        onStart: () => {
-          console.log("The text is being readed");
-        },
-        onEnd: () => {
-          console.log("Finished!");
-        }
-      });
-    },
+    command() {
+      artyom.addCommands(this.allCommands);
+    }
   },
   mounted() {
     this.initialize()
+    this.command()
   }
 }
 </script>
