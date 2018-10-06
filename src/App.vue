@@ -11,7 +11,8 @@
 </template>
 
 <script>
-import Artyom from "artyom.js"
+import Artyom from "artyom.js";
+import axios from 'axios';
 const artyom = new Artyom();
 const speakNow = (msg)  => {
       artyom.say(msg, {
@@ -26,19 +27,35 @@ const speakNow = (msg)  => {
 export default {
   name: 'App',
   data: () => ({
+    weatherUri: 'https://api.openweathermap.org/data/2.5/weather?q=',
+    apiKey: '3f3114421d339c64467f53bc2c9c57c0',
     allCommands: [
       {
         indexes:["hello","good morning","hey"], // These spoken words will trigger the execution of the command
         action:() => { // Action to be executed when a index match with spoken word
           speakNow('Hello, im Tanya your virtual weather channel in Bulacan.');
         }
+      },
+      {
+        indexes: ['weather in *'],
+        action:(i, wildcard) => {
+          speakNow(
+            this.fetchWeatherData(wildcard)
+          );
+        }
       }
     ]
   }),
   methods: {
+    fetchWeatherData(query) {
+      return axios.get(`${this.weatherUri}${query}&appid=${this.apiKey}`)
+        .then(response => {
+          return `The temperature is ${response.main.temp}`;
+        })
+    },
     initialize() {
       artyom.initialize({
-        continuous:true,
+        continuous:false,
         lang:"en-US",
         listen:true,
         debug:true,
